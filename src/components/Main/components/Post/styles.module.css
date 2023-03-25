@@ -1,0 +1,36 @@
+.container {
+  max-width: 992px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.tagContainer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: rgb(135, 208, 104);
+  color: #fff;
+  padding: 0 8px;
+}
+
+.countLike {
+  font-size: medium;
+  margin-left: 5px;
+}
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.myPostButton {
+  display: flex;
+  gap: 8px;
+}
+
+.titleContent {
+  margin-top: 0;
+}

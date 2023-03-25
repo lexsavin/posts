@@ -1,0 +1,39 @@
+.tagContainer {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: rgb(135, 208, 104);
+  color: #fff;
+  padding: 0 8px;
+}
+
+.countLike {
+  font-size: medium;
+  margin-left: 5px;
+}
+
+.countComment {
+  font-size: medium;
+  margin-left: 5px;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 16px;
+}
+
+.dateСreation {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: "tnum";
+  padding-bottom: 8px;
+}

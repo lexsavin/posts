@@ -1,0 +1,62 @@
+.header {
+  width: 100%;
+  background-color: #fff;
+  padding: 12px 0;
+}
+
+.container {
+  max-width: 992px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  outline: none;
+  text-decoration: none;
+}
+
+.logoContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+}
+
+.title {
+  font-weight: 300;
+  color: #1890ff;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.user {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.infoUser {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media screen and (max-width: 700px) {
+  .infoUser {
+    flex-direction: column;
+  }
+}
