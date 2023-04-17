@@ -7,49 +7,81 @@ import { isLiked } from "./utils/is-liked";
 import { UserContext } from "./context/user-context";
 import { PostsContext } from "./context/posts-context";
 import { LoadingContext } from "./context/loading-context";
+import { SortContext } from "./context/sort-context";
+import { PaginationContext } from "./context/pagination-contex";
 import { getTokenLocalStorage, setTokenLocalStorage } from "./utils/token";
+import { COUNT_POSTS_PER_PAGE } from "./utils/constants";
 
 export const App = memo(function App() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [token, setToken] = useState(getTokenLocalStorage());
+  const [selectedSort, setSelectedSort] = useState("by_date_added");
   const [isLoading, setIsLoading] = useState(false);
+  const [pagePagination, setPagePagination] = useState(1);
+  const [totalPagination, setTotalPagination] = useState(null);
 
   useEffect(() => {
     if (!token) return;
 
     setIsLoading(true);
 
-    Promise.all([api.getPostsList(token), api.getUserInfo(token)])
-      .then(([postsData, userData]) => {
+    Promise.all([
+      api.getPostsList(pagePagination, token),
+      api.getUserInfo(token),
+    ])
+      .then(([{ posts, total }, userData]) => {
         setUser(userData);
-        setPosts(postsData);
+        setPosts(posts);
+        setTotalPagination(Math.ceil(total / COUNT_POSTS_PER_PAGE));
       })
       .catch((err) => console.log(err))
       .finally(() => {
         setIsLoading(false);
       });
-  }, [token]);
+  }, [pagePagination, token]);
 
-  const handleSubmitSignIn = useCallback((authorizationData) => {
-    return api.signIn(authorizationData).then(({ token }) => {
-      setTokenLocalStorage(token);
-      setToken(token);
+  const handleRequestPosts = useCallback(() => {
+    if (!token) return;
 
-      return token;
-    });
-  }, []);
+    setIsLoading(true);
 
-  const handleSubmitSignUp = useCallback((authorizationData) => {
-    return api.signUp(authorizationData).then((data) => data);
-  }, []);
+    return api
+      .getPostsList(pagePagination, token)
+      .then((postsData) => {
+        setPosts(postsData.posts);
+        setTotalPagination(Math.ceil(postsData.total / COUNT_POSTS_PER_PAGE));
+
+        return postsData;
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [pagePagination, token]);
+
+  const handleSubmitSignIn = useCallback(
+    (authorizationData) =>
+      api.signIn(authorizationData).then(({ token }) => {
+        setTokenLocalStorage(token);
+        setToken(token);
+
+        return token;
+      }),
+    []
+  );
+
+  const handleSubmitSignUp = useCallback(
+    (authorizationData) => api.signUp(authorizationData).then((data) => data),
+    []
+  );
 
   const handleUpdateUser = useCallback(
-    (userUpdateData, avatarUpdateData) => {
-      return Promise.all([
+    (userUpdateData, avatarUpdateData) =>
+      Promise.all([
         api.setUserInfo(userUpdateData, token),
         api.setUserAvatar(avatarUpdateData, token),
-        api.getPostsList(token),
+        api.getPostsList(pagePagination, token),
       ]).then(([newUserUpdatedData, newUserUpdatedAvatar, postsData]) => {
         const updatedUser = {
           ...newUserUpdatedData,
@@ -57,12 +89,11 @@ export const App = memo(function App() {
         };
 
         setUser(updatedUser);
-        setPosts(postsData);
+        setPosts(postsData.posts);
 
         return [newUserUpdatedData, newUserUpdatedAvatar, postsData];
-      });
-    },
-    [token]
+      }),
+    [pagePagination, token]
   );
 
   const handlePostLike = useCallback(
@@ -82,43 +113,36 @@ export const App = memo(function App() {
   );
 
   const handleCreatePost = useCallback(
-    (dataPost) => {
-      return api.createPost(dataPost, token).then((newPost) => {
-        const newPosts = [newPost, ...posts];
-        setPosts(newPosts);
+    (dataPost) =>
+      api.createPost(dataPost, token).then((newPost) => {
+        handleRequestPosts();
 
         return newPost;
-      });
-    },
-    [posts, token]
+      }),
+    [handleRequestPosts, token]
   );
 
   const handleEditPost = useCallback(
-    (postId, dataPost) => {
-      return api.editPostById(postId, dataPost, token).then((updatedPost) => {
+    (postId, dataPost) =>
+      api.editPostById(postId, dataPost, token).then((updatedPost) => {
         const newPosts = posts.map((postState) => {
           return postState._id === updatedPost._id ? updatedPost : postState;
         });
         setPosts(newPosts);
 
         return updatedPost;
-      });
-    },
+      }),
     [posts, token]
   );
 
   const handleDeletePost = useCallback(
-    (postId) => {
-      return api.deletePostById(postId, token).then((deletedPost) => {
-        const newPosts = posts.filter(
-          (postState) => postState._id !== deletedPost._id
-        );
-        setPosts(newPosts);
+    (postId) =>
+      api.deletePostById(postId, token).then((deletedPost) => {
+        handleRequestPosts();
 
         return deletedPost;
-      });
-    },
-    [posts, token]
+      }),
+    [handleRequestPosts, token]
   );
 
   return (
@@ -134,20 +158,31 @@ export const App = memo(function App() {
           handleUpdateUser,
         }}
       >
-        <PostsContext.Provider
-          value={{
-            posts,
-            setPosts,
-            handleCreatePost,
-            handleEditPost,
-            handleDeletePost,
-            handlePostLike,
-          }}
-        >
-          <Header />
-          <Main />
-          <Footer />
-        </PostsContext.Provider>
+        <SortContext.Provider value={{ selectedSort, setSelectedSort }}>
+          <PostsContext.Provider
+            value={{
+              posts,
+              setPosts,
+              handleCreatePost,
+              handleEditPost,
+              handleDeletePost,
+              handlePostLike,
+            }}
+          >
+            <PaginationContext.Provider
+              value={{
+                pagePagination,
+                setPagePagination,
+                totalPagination,
+                setTotalPagination,
+              }}
+            >
+              <Header />
+              <Main />
+              <Footer />
+            </PaginationContext.Provider>
+          </PostsContext.Provider>
+        </SortContext.Provider>
       </UserContext.Provider>
     </LoadingContext.Provider>
   );

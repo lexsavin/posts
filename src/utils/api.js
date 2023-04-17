@@ -1,4 +1,4 @@
-import { BASE_URL } from "./constants";
+import { BASE_URL, COUNT_POSTS_PER_PAGE } from "./constants";
 
 const onResponce = (res) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
@@ -60,13 +60,16 @@ class Api {
     }).then(onResponce);
   }
 
-  getPostsList(token) {
-    return fetch(`${this._baseUrl}/v2/group-10/posts`, {
-      headers: {
-        "content-type": "application/json",
-        Authorization: token,
-      },
-    }).then(onResponce);
+  getPostsList(pagePagination, token) {
+    return fetch(
+      `${this._baseUrl}/v2/group-10/posts/paginate?page=${pagePagination}&limit=${COUNT_POSTS_PER_PAGE}&query=`,
+      {
+        headers: {
+          "content-type": "application/json",
+          Authorization: token,
+        },
+      }
+    ).then(onResponce);
   }
 
   getPostById(postId, token) {

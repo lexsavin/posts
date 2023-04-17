@@ -1,13 +1,28 @@
 import styles from "./styles.module.css";
 import Button from "@mui/material/Button";
-import { useCallback, memo } from "react";
+import { useCallback, memo, useContext } from "react";
+import { SortContext } from "../../../../../../context/sort-context";
 
-export const Sort = memo(function Sort({ selectedSort, tabs, onChangeSort }) {
+const tabs = [
+  { id: "by_date_added", title: "По дате добавления" },
+  {
+    id: "count_likes",
+    title: "По количеству лайков",
+  },
+  {
+    id: "count_comments",
+    title: "По количеству комментариев",
+  },
+];
+
+export const Sort = memo(function Sort() {
+  const { selectedSort, setSelectedSort } = useContext(SortContext);
+
   const handleClick = useCallback(
     (tabId) => {
-      onChangeSort(tabId);
+      setSelectedSort(tabId);
     },
-    [onChangeSort]
+    [setSelectedSort]
   );
 
   return (

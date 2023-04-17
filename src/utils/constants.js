@@ -13,3 +13,5 @@ export const BASE_URL = "https://api.react-learning.ru";
 
 export const NO_IMAGE_URL =
   "https://b-n-c.ru/local/templates/.default/img/no-img.jpg";
+
+export const COUNT_POSTS_PER_PAGE = 12;
