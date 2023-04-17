@@ -1,22 +1,13 @@
 import styles from "./styles.module.css";
 import { Card } from "../../components/Card";
-import { useContext, useState, useCallback, memo } from "react";
+import { useContext, memo } from "react";
 import { ContentHeader } from "../../components/ContentHeader";
 import { PostsContext } from "../../../../context/posts-context";
 import { LoadingContext } from "../../../../context/loading-context";
+import { SortContext } from "../../../../context/sort-context";
 import { CardSkeleton } from "../../components/CardSkeleton";
-
-const tabs = [
-  { id: "all_posts", title: "Все посты" },
-  {
-    id: "count_likes",
-    title: "По количеству лайков",
-  },
-  {
-    id: "count_comments",
-    title: "По количеству комментариев",
-  },
-];
+import { Pagination } from "../../components/Pagination";
+import { Box } from "@mui/material";
 
 const sortСallbacks = {
   count_likes: (posts) =>
@@ -27,13 +18,13 @@ const sortСallbacks = {
 
 export const CatalogPage = memo(function CatalogPage() {
   const { posts, handlePostLike, handleDeletePost } = useContext(PostsContext);
+  const { selectedSort } = useContext(SortContext);
   const { isLoading } = useContext(LoadingContext);
-  const [selectedSort, setSelectedSort] = useState("all_posts");
 
   const sortedPosts =
-    selectedSort === "all_posts" ? posts : sortСallbacks[selectedSort](posts);
-
-  const handleChangeSort = useCallback((tabId) => setSelectedSort(tabId), []);
+    selectedSort === "by_date_added"
+      ? posts
+      : sortСallbacks[selectedSort](posts);
 
   const skeletons = new Array(12)
     .fill(<></>)
@@ -41,11 +32,7 @@ export const CatalogPage = memo(function CatalogPage() {
 
   return (
     <div className={styles.container}>
-      <ContentHeader
-        selectedSort={selectedSort}
-        onChangeSort={handleChangeSort}
-        tabs={tabs}
-      />
+      <ContentHeader />
       <div className={styles.cardList}>
         {isLoading
           ? skeletons
@@ -58,6 +45,9 @@ export const CatalogPage = memo(function CatalogPage() {
               />
             ))}
       </div>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Pagination />
+      </Box>
     </div>
   );
 });

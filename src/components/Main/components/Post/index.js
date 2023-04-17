@@ -115,8 +115,8 @@ export const Post = memo(function Post({
             </CardActions>
             {tags?.length && (
               <div className={styles.tagContainer}>
-                {tags.map((tag) => (
-                  <div key={tag} className={styles.tag}>
+                {tags.map((tag, i) => (
+                  <div key={tag + i} className={styles.tag}>
                     {tag}
                   </div>
                 ))}
