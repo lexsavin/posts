@@ -81,15 +81,6 @@ class Api {
     }).then(onResponce);
   }
 
-  getInfoUserById(userId, token) {
-    return fetch(`${this._baseUrl}/v2/group-10/users/${userId}`, {
-      headers: {
-        "content-type": "application/json",
-        Authorization: token,
-      },
-    }).then(onResponce);
-  }
-
   changeLikePost(postId, isLike, token) {
     return fetch(`${this._baseUrl}/v2/group-10/posts/likes/${postId}`, {
       method: isLike ? "DELETE" : "PUT",
