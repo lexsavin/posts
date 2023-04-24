@@ -50,9 +50,7 @@ export const PostPage = memo(function PostPage() {
     .map((item, i) => <Skeleton key={"skeleton" + i} animation="wave" />);
 
   return isLoading ? (
-    <Box sx={{ maxWidth: "992px", margin: "0 auto", padding: "0 16px" }}>
-      {skeletons}
-    </Box>
+    <Box sx={{ width: "100%", margin: "16px" }}>{skeletons}</Box>
   ) : (
     <Post
       {...post}
