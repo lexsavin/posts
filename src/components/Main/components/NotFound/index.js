@@ -17,7 +17,7 @@ export const NotFound = memo(function NotFound() {
         <Button
           sx={buttonStyles}
           variant="outlined"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/posts")}
         >
           На главную
         </Button>

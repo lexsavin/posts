@@ -17,16 +17,19 @@ export const Main = memo(function Main() {
   const { pathname } = useLocation();
   const { token } = useContext(UserContext);
 
-  const isCatalogPage = pathname === "/" && token;
+  const isCatalogPage = pathname === "/posts" && token;
 
   return (
     <StyledMain isCatalogPage={isCatalogPage}>
       <Routes>
-        <Route index element={token ? <CatalogPage /> : <StartPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/post/:postId" element={<PostPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route
+          path="/posts"
+          element={token ? <CatalogPage /> : <StartPage />}
+        />
+        <Route path="/posts/login" element={<Login />} />
+        <Route path="/posts/register" element={<Register />} />
+        <Route path="/posts/post/:postId" element={<PostPage />} />
+        <Route path="/posts/*" element={<NotFoundPage />} />
       </Routes>
     </StyledMain>
   );

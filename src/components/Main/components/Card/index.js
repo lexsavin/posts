@@ -69,7 +69,7 @@ export const Card = memo(function Card({
           title={author?.name}
           subheader={author?.about}
         />
-        <StyledLink to={`/post/${_id}`}>
+        <StyledLink to={`/posts/post/${_id}`}>
           <CardMedia component="img" height="194" image={image} alt="Uknown" />
           <CardContent>
             <h5>{title}</h5>

@@ -27,7 +27,7 @@ export const Register = memo(function Register() {
   const navigate = useNavigate();
 
   const handleCloseForm = useCallback(() => {
-    navigate("/");
+    navigate("/posts");
     setShowAlertError(false);
   }, [navigate]);
 
@@ -37,7 +37,7 @@ export const Register = memo(function Register() {
     (data) => {
       onSubmitSignUp(data)
         .then(() =>
-          navigate("/", {
+          navigate("/posts", {
             state: {
               isSuccessRegistration: true,
             },

@@ -21,7 +21,7 @@ export const Header = memo(function Header() {
 
   const handleRedirectMainPage = useCallback(() => {
     setPagePagination(1);
-    navigate("/");
+    navigate("/posts");
   }, [navigate, setPagePagination]);
 
   const handleSignOut = useCallback(() => {
@@ -32,7 +32,7 @@ export const Header = memo(function Header() {
     setPosts([]);
     setPagePagination(1);
     setTotalPagination(null);
-    navigate("/");
+    navigate("/posts");
   }, [
     navigate,
     setPagePagination,

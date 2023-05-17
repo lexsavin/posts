@@ -46,7 +46,7 @@ export const Post = memo(function Post({
 
   const handleDeletePost = useCallback(() => {
     onDeletePost(_id)
-      .then(() => navigate("/"))
+      .then(() => navigate("/posts"))
       .catch((err) => console.log(err));
   }, [_id, navigate, onDeletePost]);
 

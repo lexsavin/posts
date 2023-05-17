@@ -27,7 +27,7 @@ export const Login = memo(function Login() {
   const navigate = useNavigate();
 
   const handleCloseForm = useCallback(() => {
-    navigate("/");
+    navigate("/posts");
     setShowAlertError(false);
   }, [navigate]);
 

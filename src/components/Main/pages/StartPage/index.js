@@ -38,7 +38,7 @@ export const StartPage = memo(function StartPage() {
             color: "black",
             borderColor: "black",
           }}
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/posts/login")}
           variant="outlined"
         >
           Войти
@@ -49,7 +49,7 @@ export const StartPage = memo(function StartPage() {
             color: "black",
             borderColor: "black",
           }}
-          onClick={() => navigate("/register")}
+          onClick={() => navigate("/posts/register")}
           variant="outlined"
         >
           Регистрация
